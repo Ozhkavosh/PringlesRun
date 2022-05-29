@@ -27,8 +27,8 @@ public class StackHolder : MonoBehaviour
     }
     public void AddToStack( Stackable item)
     {
-        if (item.wasStacked) return;
-        stockpile.Add(item);
+        if (item.IsStacked()) return;
+        print("Added to stack");
         if(stackedLast)
         {
             item.SetStackOn(stackedLast.stackPosition);
@@ -37,6 +37,7 @@ public class StackHolder : MonoBehaviour
         {
             item.SetStackOn(transform);
         }
+        stockpile.Add(item);
         stackedLast = item;
     }
 }

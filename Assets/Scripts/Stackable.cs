@@ -11,7 +11,7 @@ public class Stackable : MonoBehaviour
     [SerializeField] public Transform backPosition;
     public ItemType Type;
     Collider _collider;
-    public bool wasStacked = false;
+    bool wasStacked = false;
     int _price;
     private void Start()
     {
@@ -25,15 +25,29 @@ public class Stackable : MonoBehaviour
         newPos -= backPosition.localPosition;
         rootTransform.position = Vector3.MoveTowards(rootTransform.position, newPos, 0.2f);
     }
-    void AddPrice(int price)
+    public void AddPrice(int price)
     {
         _price += price;
+        print($"Price {basePrice} -> {_price}");
+    }
+    public int GetPrice()
+    {
+        return _price;
     }
     public void SetStackOn(Transform transform)
     {
         transformToStackOn = transform;
         wasStacked = true;
         _collider.isTrigger = false;
+    }
+    public void Unstack()
+    {
+        wasStacked = false;
+        transformToStackOn = null;
+    }
+    public bool IsStacked()
+    {
+        return wasStacked;
     }
     private void OnTriggerEnter(Collider other)
     {
