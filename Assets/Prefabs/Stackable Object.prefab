@@ -196,6 +196,14 @@ MonoBehaviour:
   stackPosition: {fileID: 1511378227662384831}
   rootTransform: {fileID: 1511378228078419350}
   backPosition: {fileID: 8895036615188751159}
+  priceIndicator: {fileID: 2058539613998188720, guid: 09db90644f3eef4448aa35aedc4b3ab3, type: 3}
+  followSpeed: 0.3
+  priceChangeEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  triggerEntered:
+    m_PersistentCalls:
+      m_Calls: []
   Type: 0
 --- !u!1 &5788138246668194281
 GameObject:

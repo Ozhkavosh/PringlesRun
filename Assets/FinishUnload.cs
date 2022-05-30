@@ -6,23 +6,14 @@ public class FinishUnload : MonoBehaviour
 {
     List<Stackable> stackables = new List<Stackable>(10);
     [SerializeField]Transform target;
-    void Start()
-    {
-        
-    }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
     private void OnTriggerEnter(Collider other)
     {
-        print(other.gameObject.name);
         Stackable stackable = other.GetComponent<Stackable>();
         if (!stackable | stackables.Contains(stackable)) return;
+
         stackables.Add(stackable);
-        stackable.Unstack();
+        stackable.holder.RemoveFromStack(stackable);
         Rigidbody rb =  other.attachedRigidbody;
         rb.isKinematic = false;
         rb.useGravity = true;

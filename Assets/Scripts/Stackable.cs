@@ -1,18 +1,21 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-//[RequireComponent(typeof(Collider))]
 public class Stackable : MonoBehaviour
 {
     [SerializeField] int basePrice;
-    Transform transformToStackOn;
     [SerializeField] public Transform stackPosition;
     [SerializeField] public Transform rootTransform;
     [SerializeField] public Transform backPosition;
+    [Range(0.05f,1f),SerializeField] float followSpeed = 0.3f;
+    public UnityEngine.Events.UnityEvent<Stackable,int> priceChangeEvent;
+    public UnityEngine.Events.UnityEvent<Collider> triggerEntered;
     public ItemType Type;
+    Transform transformToStackOn;
     Collider _collider;
     bool wasStacked = false;
     int _price;
+    public StackHolder holder { get;  set; }
     private void Start()
     {
         _price = basePrice;
@@ -23,18 +26,18 @@ public class Stackable : MonoBehaviour
         if (!wasStacked) return;
         Vector3 newPos = transformToStackOn.position;
         newPos -= backPosition.localPosition;
-        rootTransform.position = Vector3.MoveTowards(rootTransform.position, newPos, 0.2f);
+        rootTransform.position = Vector3.Lerp(rootTransform.position, newPos, followSpeed);
     }
     public void AddPrice(int price)
     {
+        priceChangeEvent.Invoke(this, price);
         _price += price;
-        print($"Price {basePrice} -> {_price}");
     }
     public int GetPrice()
     {
         return _price;
     }
-    public void SetStackOn(Transform transform)
+    public void StackOn(Transform transform)
     {
         transformToStackOn = transform;
         wasStacked = true;
@@ -52,8 +55,6 @@ public class Stackable : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         if ( !wasStacked) return;
-        Stackable stackable = other.GetComponent<Stackable>();
-        if (!stackable) return;
-        StackHolder.instance.AddToStack(stackable);
+        triggerEntered.Invoke(other);
     }
 }
