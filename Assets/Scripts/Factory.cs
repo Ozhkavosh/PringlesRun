@@ -10,8 +10,10 @@ public class Factory : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         Stackable item = other.GetComponent<Stackable>();
+        if (item == null) return;
         if (item.Type != factoryBehavior.inputType) return;
         Convert(item,factoryBehavior.outputType);
+        item.holder.GetComponent<Player>().ApplySlowdown(1f);
     }
     private void Convert(Stackable obj, ItemType type)
     {

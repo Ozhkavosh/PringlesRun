@@ -1,13 +1,11 @@
-using System.Collections;
-using System.Collections.Generic;
+
 using UnityEngine;
 
 public class PriceIndicator : MonoBehaviour
 {
     [SerializeField]TMPro.TMP_Text textField;
     [SerializeField] float lifetime = 1f;
-    [SerializeField] float speed = 1f;
-    [SerializeField] Animation animation;
+    [SerializeField] Animation anim;
 
     private float _timer;
     private int _price;
@@ -33,14 +31,18 @@ public class PriceIndicator : MonoBehaviour
     {
         _price = value;
         textField.text = value + "$";
-        animation.Play();
+        if (_price < 0)
+        {
+            textField.color = Color.red;
+        }
+        anim.Play();
     }
     public void AddValue( int value)
     {
         _price += value;
         lifetime += 1;
         textField.text = _price + "$";
-        animation.Play();
+        anim.Play();
     }
 
 }

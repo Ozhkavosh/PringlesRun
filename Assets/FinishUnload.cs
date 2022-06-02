@@ -9,11 +9,18 @@ public class FinishUnload : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        Player player = other.GetComponent<Player>();
+        if (player != null)
+        {
+            Debug.Log("Player collided with unload trigger",this);
+            player.StopHand();
+            return;
+        }
         Stackable stackable = other.GetComponent<Stackable>();
         if (!stackable | stackables.Contains(stackable)) return;
 
         stackables.Add(stackable);
-        stackable.holder.RemoveFromStack(stackable);
+        stackable.Unstack();
         Rigidbody rb =  other.attachedRigidbody;
         rb.isKinematic = false;
         rb.useGravity = true;

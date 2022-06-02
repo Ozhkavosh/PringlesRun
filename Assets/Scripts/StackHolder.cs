@@ -3,32 +3,24 @@ using System.Collections.Generic;
 using UnityEngine;
 public class StackHolder : MonoBehaviour
 {
-    public static StackHolder instance;
     [SerializeField] LinkedList<Stackable> stockpile;
     [SerializeField] TMPro.TMP_Text textField;
     [SerializeField] GameObject priceIndicator;
-    int totalPrice;
+    private int totalPrice;
     private Vector3 lastPriceChangePos;
     private PriceIndicator lastIndicator;
+    private Transform stackablesTransform;
     Stackable stackedLast;
     private void Awake()
     {
-        if(instance is null)
-            instance ??= this;
-        else
-            Destroy(this);
+        stackablesTransform = GameObject.Find("Stackables").transform;
         stockpile = new LinkedList<Stackable>();
     }
-    private void OnTriggerEnter(Collider other)
-    {
-        
-        Stackable stackable = other.GetComponent<Stackable>();
-        if (!stackable) return;
-        AddToStack(stackable);
-        stackable.triggerEntered.AddListener(OnTriggerEnter);
-    }
+
     public void AddToStack( Stackable item)
     {
+        IndicatePriceChange(item, item.GetPrice(), true);
+
         if (item.IsStacked()) return;
         if(stackedLast)
         {
@@ -40,21 +32,45 @@ public class StackHolder : MonoBehaviour
         }
         stockpile.AddLast(item);
         stackedLast = item;
+        item.triggerEntered.AddListener(OnTriggerEnter);
         item.priceChangeEvent.AddListener(OnPriceChange);
         item.holder = this;
         item.transform.parent = transform.parent;
-        CalculatePrice();
     }
     public void RemoveFromStack(Stackable item)
     {
-        LinkedListNode<Stackable> node = stockpile.Find(item);
-        stackedLast = stockpile.Last.Value;
+        IndicatePriceChange(item, -item.GetPrice(), true);
 
-        stockpile.Remove(item);
         item.Unstack();
         item.priceChangeEvent.RemoveListener(OnPriceChange);
         item.triggerEntered.RemoveListener(OnTriggerEnter);
-        item.transform.parent = GameObject.Find("Stackables").transform;
+        item.transform.parent = stackablesTransform;
+
+        LinkedListNode<Stackable> node = stockpile.Find(item);
+        LinkedListNode<Stackable> nextNode = node.Next;
+        LinkedListNode<Stackable> prevNode = node.Previous;
+        if (nextNode!=null)
+        {
+            if(prevNode != null)
+            {
+                nextNode.Value.StackOn(prevNode.Value.stackPosition);
+            }
+            else
+            {
+                nextNode.Value.StackOn(transform);
+            }
+                
+        }
+        stockpile.Remove(node);
+        if (stockpile.Count == 0)
+        {
+            stackedLast = null;
+        }
+        else
+        {
+            stackedLast = stockpile.Last.Value;
+        }
+        
     }
     public void CalculatePrice()
     {
@@ -69,11 +85,17 @@ public class StackHolder : MonoBehaviour
     }
     public void OnPriceChange(Stackable item, int value)
     {
+        
+        IndicatePriceChange(item, value);
+        
+    }
+    private void IndicatePriceChange( Stackable item, int value,bool forceNew = false)
+    {
         totalPrice += value;
         Vector3 itemPos = item.transform.position;
-        if ( (lastPriceChangePos-itemPos).magnitude >4 | !lastIndicator)
+        if ((lastPriceChangePos - itemPos).magnitude > 4 | !lastIndicator | forceNew)
         {
-            Vector3 newPos = itemPos + new Vector3(0.3f, 1.3f,0);
+            Vector3 newPos = itemPos + new Vector3(0.3f, 1.3f, 0);
             lastIndicator = Instantiate(priceIndicator, newPos, Quaternion.identity).GetComponent<PriceIndicator>();
             lastIndicator.SetValue(value);
         }
@@ -81,10 +103,22 @@ public class StackHolder : MonoBehaviour
         {
             lastIndicator.AddValue(value);
         }
-
-
         lastPriceChangePos = itemPos;
         ShowPrice();
     }
     private void ShowPrice() => textField.text = $"{totalPrice} $";
+    private void OnTriggerEnter(Collider other)
+    {
+        Stackable stackable = other.GetComponent<Stackable>();
+        if (stackable)
+        {
+            AddToStack(stackable);
+            return;
+        }
+        Obstacle obstacle = other.GetComponent<Obstacle>();
+        if (obstacle)
+        {
+            return;
+        }
+    }
 }
