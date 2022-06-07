@@ -1,38 +1,31 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class Obstacle : MonoBehaviour
+namespace Assets.Scripts
 {
-    [SerializeField] float cooldown = 1f;
-    [SerializeField] ParticleSystem particleSys;
-    float timer = 0f;
-    bool canDestroy = true;
-    void Start()
+    public class Obstacle : MonoBehaviour
     {
-        
-    }
+        public bool AppliesPushback;
+        [SerializeField] private float _destroyCooldown = 1f;
+        [SerializeField] private ParticleSystem _particleSystem;
+        private bool _onCooldown = false;
+        private void OnTriggerEnter(Collider other)
+        {
+            Stackable stackable = other.GetComponent<Stackable>();
+            if (stackable == null || _onCooldown) return;
 
-    void Update()
-    {
-        if (canDestroy == true) return;
-        timer += Time.deltaTime;
-        if (timer >= cooldown) 
-        {
-            canDestroy = true;
-            timer = 0;
+            stackable.Holder.OnCollideWithObstacle(this,stackable);
+            if (_particleSystem!=null) _particleSystem.Play();
+
+            StartCoroutine(WaitCooldown());
+
         }
-    }
-    private void OnTriggerEnter(Collider other)
-    {
-        Stackable stackable = other.GetComponent<Stackable>();
-        if (stackable!=null & canDestroy)
+
+        private IEnumerator WaitCooldown()
         {
-            stackable.holder.GetComponent<Player>().ApplySlowdown(2f);
-            stackable.holder.RemoveFromStack(stackable);
-            particleSys.Play();
-            Destroy(stackable.gameObject);
-            canDestroy = false;
+            _onCooldown = true;
+            yield return new WaitForSeconds(_destroyCooldown);
+            _onCooldown = false;
         }
     }
 }

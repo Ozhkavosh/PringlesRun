@@ -1,16 +1,19 @@
 ﻿
 using UnityEngine;
 
-[CreateAssetMenu(fileName ="Factory",menuName ="Factory Behavior")]
-public class FactoryBehaviorScript : ScriptableObject
+namespace Assets.Scripts
 {
-    public ItemType inputType;
-    public ItemType outputType;
-    [SerializeField] GameObject GraphicsPrefab;
-
-    public GameObject GetObject()
+    [CreateAssetMenu(fileName ="Factory",menuName ="Factory Behavior")]
+    public class FactoryBehaviorScript : ScriptableObject
     {
-        return Instantiate( GraphicsPrefab);
+        public ItemType InputType;
+        public ItemType OutputType;
+        [SerializeField] GameObject _graphicsPrefab;
+
+        public GameObject GetObject()
+        {
+            return Instantiate( _graphicsPrefab);
+        }
     }
 }
 

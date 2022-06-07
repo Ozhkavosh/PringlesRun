@@ -1,124 +1,111 @@
-using System.Collections;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
-public class StackHolder : MonoBehaviour
+
+namespace Assets.Scripts
 {
-    [SerializeField] LinkedList<Stackable> stockpile;
-    [SerializeField] TMPro.TMP_Text textField;
-    [SerializeField] GameObject priceIndicator;
-    private int totalPrice;
-    private Vector3 lastPriceChangePos;
-    private PriceIndicator lastIndicator;
-    private Transform stackablesTransform;
-    Stackable stackedLast;
-    private void Awake()
+    public class StackHolder : MonoBehaviour
     {
-        stackablesTransform = GameObject.Find("Stackables").transform;
-        stockpile = new LinkedList<Stackable>();
-    }
+        [SerializeField] private List<Stackable> _stockpile;
+        [SerializeField] private TMPro.TMP_Text _totalPriceTextField;
+        [SerializeField] private GameObject _priceIndicator;
+        private int _totalPrice;
+        private Vector3 _lastPriceChangePos;
+        private PriceIndicator _lastIndicator;
+        private Transform _stackPosTransform;
+        private Transform _freeStackTransform;
+        private Player _player;
 
-    public void AddToStack( Stackable item)
-    {
-        IndicatePriceChange(item, item.GetPrice(), true);
-
-        if (item.IsStacked()) return;
-        if(stackedLast)
+        private void Awake()
         {
-            item.StackOn(stackedLast.stackPosition);
+            _stockpile = new List<Stackable>();
+            _stackPosTransform = transform;
+            _freeStackTransform = transform.parent.parent;
+            _player = GetComponent<Player>();
         }
-        else
+
+        public void AddToStack( Stackable item)
         {
-            item.StackOn(transform);
+            if (item.IsStacked() || _stockpile.Contains(item)) return;
+
+            IndicatePriceChange(item, item.GetPrice(), true);
+            StackItem(item);
+            _stockpile.Add(item);
+            _stackPosTransform = item.StackPosition;
         }
-        stockpile.AddLast(item);
-        stackedLast = item;
-        item.triggerEntered.AddListener(OnTriggerEnter);
-        item.priceChangeEvent.AddListener(OnPriceChange);
-        item.holder = this;
-        item.transform.parent = transform.parent;
-    }
-    public void RemoveFromStack(Stackable item)
-    {
-        IndicatePriceChange(item, -item.GetPrice(), true);
-
-        item.Unstack();
-        item.priceChangeEvent.RemoveListener(OnPriceChange);
-        item.triggerEntered.RemoveListener(OnTriggerEnter);
-        item.transform.parent = stackablesTransform;
-
-        LinkedListNode<Stackable> node = stockpile.Find(item);
-        LinkedListNode<Stackable> nextNode = node.Next;
-        LinkedListNode<Stackable> prevNode = node.Previous;
-        if (nextNode!=null)
+        public void RemoveFromStack(Stackable item)
         {
-            if(prevNode != null)
+            IndicatePriceChange(item, -item.GetPrice());
+            UnstackItem(item);
+            _stockpile.Remove(item);
+            _stackPosTransform = (_stockpile.Count > 0 )? _stockpile[^1].StackPosition : transform;
+        }
+        public void OnPriceChange(Stackable item, int value) => IndicatePriceChange(item, value);
+        private void IndicatePriceChange( Stackable item, int value,bool forceNew = false)
+        {
+            _totalPrice += value;
+            Vector3 itemPos = item.transform.position;
+            if ((_lastPriceChangePos - itemPos).magnitude > 4 || !_lastIndicator || forceNew || Math.Sign(_lastIndicator.GetValue())!=Math.Sign(value))
             {
-                nextNode.Value.StackOn(prevNode.Value.stackPosition);
+                _lastIndicator = Instantiate(_priceIndicator, itemPos, Quaternion.identity).GetComponent<PriceIndicator>();
+                _lastIndicator.SetValue(value);
             }
             else
             {
-                nextNode.Value.StackOn(transform);
+                _lastIndicator.AddValue(value);
             }
-                
+            _lastPriceChangePos = itemPos;
+            ShowPrice();
         }
-        stockpile.Remove(node);
-        if (stockpile.Count == 0)
+        private void ShowPrice() => _totalPriceTextField.text = $"{_totalPrice} $";
+        private void OnTriggerEnter(Collider other)
         {
-            stackedLast = null;
+            _player.ApplySlowdown(1f);
+            var stackable = other.GetComponent<Stackable>();
+            if (stackable!=null && !stackable.PreparingToDestroy())
+            {
+                AddToStack(stackable);
+            }
         }
-        else
+
+        public void OnCollideWithObstacle(Obstacle obstacle, Stackable item)
         {
-            stackedLast = stockpile.Last.Value;
+            if (obstacle.AppliesPushback) _player.ApplyPushBack(5f);
+
+            int index = _stockpile.IndexOf(item);
+            item.SetToDestroy();
+            Destroy(item.gameObject);
+            if (item == _stockpile[^1])
+            {
+                RemoveFromStack(item);
+                return;
+            }
+            Queue<Stackable> queue = new Queue<Stackable>();
+            for (int i = index; i < _stockpile.Count; i++)
+            {
+                queue.Enqueue(_stockpile[i]);
+            }
+            while (queue.Count > 0)
+            {
+                RemoveFromStack(queue.Dequeue());
+            }
         }
-        
-    }
-    public void CalculatePrice()
-    {
-        LinkedListNode<Stackable> item = stockpile.First;
-        totalPrice = item.Value.GetPrice();
-        for (int i = 1; i < stockpile.Count; i++)
+
+        private void UnstackItem(Stackable item)
         {
-            item = item.Next;
-            totalPrice += item.Value.GetPrice();
+            item.Unstack();
+            item.PriceChangeEvent.RemoveListener(OnPriceChange);
+            item.TriggerEntered.RemoveListener(OnTriggerEnter);
+            item.Holder = null;
+            item.transform.parent = _freeStackTransform;
         }
-        ShowPrice();
-    }
-    public void OnPriceChange(Stackable item, int value)
-    {
-        
-        IndicatePriceChange(item, value);
-        
-    }
-    private void IndicatePriceChange( Stackable item, int value,bool forceNew = false)
-    {
-        totalPrice += value;
-        Vector3 itemPos = item.transform.position;
-        if ((lastPriceChangePos - itemPos).magnitude > 4 | !lastIndicator | forceNew)
+        private void StackItem(Stackable item)
         {
-            Vector3 newPos = itemPos + new Vector3(0.3f, 1.3f, 0);
-            lastIndicator = Instantiate(priceIndicator, newPos, Quaternion.identity).GetComponent<PriceIndicator>();
-            lastIndicator.SetValue(value);
-        }
-        else
-        {
-            lastIndicator.AddValue(value);
-        }
-        lastPriceChangePos = itemPos;
-        ShowPrice();
-    }
-    private void ShowPrice() => textField.text = $"{totalPrice} $";
-    private void OnTriggerEnter(Collider other)
-    {
-        Stackable stackable = other.GetComponent<Stackable>();
-        if (stackable)
-        {
-            AddToStack(stackable);
-            return;
-        }
-        Obstacle obstacle = other.GetComponent<Obstacle>();
-        if (obstacle)
-        {
-            return;
+            item.StackOn(_stackPosTransform ? _stackPosTransform: transform);
+            item.TriggerEntered.AddListener(OnTriggerEnter);
+            item.PriceChangeEvent.AddListener(OnPriceChange);
+            item.Holder = this;
+            item.transform.parent = transform.parent;
         }
     }
 }

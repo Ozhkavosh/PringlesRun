@@ -1,10 +1,11 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-public enum ItemType
+namespace Assets.Scripts
 {
-    Log,
-    Plank,
-    Crate
+    public enum ItemType
+    {
+        Log,
+        Plank,
+        Crate,
+        Stool,
+        Door
+    }
 }
