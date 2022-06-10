@@ -16,7 +16,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &6099121608602783394
 Transform:
@@ -4941,13 +4941,13 @@ GameObject:
   - component: {fileID: 6099121608801370884}
   - component: {fileID: 6099121608801370887}
   - component: {fileID: 6099121608801370886}
-  - component: {fileID: 6099121608801370881}
+  - component: {fileID: 3387651009811124028}
   m_Layer: 0
   m_Name: PitObstacle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &6099121608801370885
 Transform:
@@ -4993,7 +4993,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 45371882cf4b2d241b18a696e2838478, type: 2}
+  - {fileID: 2100000, guid: 2a46823dd9f74f3449e10d57bbc338a4, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -5028,7 +5028,7 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &6099121608801370881
+--- !u!114 &3387651009811124028
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -5037,9 +5037,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 6099121608801370880}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f97612ec0f4b832469ed0c9d5b17da0a, type: 3}
+  m_Script: {fileID: 11500000, guid: d11d00e3d6d061d45af6d9c664e22df2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  AppliesPushback: 0
-  _cooldown: 0
+  AppliesSlowdown: 0
   _particleSystem: {fileID: 0}
+  HasPushBack: 0
+  InteractionCooldown: 0

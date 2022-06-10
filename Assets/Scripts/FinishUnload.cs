@@ -15,7 +15,7 @@ namespace Assets.Scripts
             if (player != null)
             {
                 Debug.Log("Player collided with unload trigger",this);
-                player.StopHand();
+                player.ReachedFullStop();
                 return;
             }
             Stackable stackable = other.GetComponent<Stackable>();

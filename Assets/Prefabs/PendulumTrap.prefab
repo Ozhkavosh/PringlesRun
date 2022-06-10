@@ -12,8 +12,8 @@ GameObject:
   - component: {fileID: 8548360293360181487}
   - component: {fileID: 8548360293360181484}
   - component: {fileID: 8548360293360181485}
-  - component: {fileID: 8548360293360181482}
   - component: {fileID: 8548360293360181477}
+  - component: {fileID: 7645158873308121501}
   m_Layer: 0
   m_Name: PendulumTrap
   m_TagString: Untagged
@@ -100,21 +100,6 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &8548360293360181482
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8548360293360181483}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f97612ec0f4b832469ed0c9d5b17da0a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  AppliesPushback: 1
-  _destroyCooldown: 1
-  _particleSystem: {fileID: 8548360294100364662}
 --- !u!111 &8548360293360181477
 Animation:
   m_ObjectHideFlags: 0
@@ -131,6 +116,22 @@ Animation:
   m_PlayAutomatically: 1
   m_AnimatePhysics: 0
   m_CullingType: 0
+--- !u!114 &7645158873308121501
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8548360293360181483}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d11d00e3d6d061d45af6d9c664e22df2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  AppliesSlowdown: 0
+  _particleSystem: {fileID: 8548360294100364662}
+  HasPushBack: 1
+  InteractionCooldown: 1
 --- !u!1 &8548360294100364660
 GameObject:
   m_ObjectHideFlags: 0

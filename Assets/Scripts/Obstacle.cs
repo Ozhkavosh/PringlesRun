@@ -1,31 +1,20 @@
-using System.Collections;
 using UnityEngine;
 
 namespace Assets.Scripts
 {
     public class Obstacle : MonoBehaviour
     {
-        public bool AppliesPushback;
-        [SerializeField] private float _destroyCooldown = 1f;
+        public bool AppliesSlowdown;
         [SerializeField] private ParticleSystem _particleSystem;
-        private bool _onCooldown = false;
-        private void OnTriggerEnter(Collider other)
+
+        protected void Interact(Collider other)
         {
             Stackable stackable = other.GetComponent<Stackable>();
-            if (stackable == null || _onCooldown) return;
+            if (stackable == null) return;
+            if(stackable.IsStacked() && stackable.Holder!=null) stackable.Holder.Player.OnCollideWithObstacle(this, stackable);
 
-            stackable.Holder.OnCollideWithObstacle(this,stackable);
-            if (_particleSystem!=null) _particleSystem.Play();
-
-            StartCoroutine(WaitCooldown());
-
+            if (_particleSystem != null) _particleSystem.Play();
         }
 
-        private IEnumerator WaitCooldown()
-        {
-            _onCooldown = true;
-            yield return new WaitForSeconds(_destroyCooldown);
-            _onCooldown = false;
-        }
     }
 }

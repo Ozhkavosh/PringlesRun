@@ -12,13 +12,13 @@ GameObject:
   - component: {fileID: 4642399064858902415}
   - component: {fileID: 4642399064858902412}
   - component: {fileID: 4642399064858902413}
-  - component: {fileID: 4642399064858902410}
+  - component: {fileID: 1101442478568851159}
   m_Layer: 0
-  m_Name: SimpleObstacle
+  m_Name: SimpleTrap
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &4642399064858902414
 Transform:
@@ -99,7 +99,7 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &4642399064858902410
+--- !u!114 &1101442478568851159
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -108,12 +108,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 4642399064858902411}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f97612ec0f4b832469ed0c9d5b17da0a, type: 3}
+  m_Script: {fileID: 11500000, guid: d11d00e3d6d061d45af6d9c664e22df2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  AppliesPushback: 1
-  _cooldown: 1
+  AppliesSlowdown: 0
   _particleSystem: {fileID: 4642399064928514582}
+  HasPushBack: 1
+  InteractionCooldown: 0
 --- !u!1 &4642399064928514580
 GameObject:
   m_ObjectHideFlags: 0
@@ -130,7 +131,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &4642399064928514601
 Transform:

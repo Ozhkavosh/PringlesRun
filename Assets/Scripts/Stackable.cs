@@ -65,6 +65,7 @@ namespace Assets.Scripts
         public void SetToDestroy()
         {
             Debug.Log("Set to destroy",this);
+            Destroy(gameObject);
             _awaitsToGetDestroyed = true;
         }
 
