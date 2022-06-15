@@ -1,50 +1,64 @@
 
+using System;
 using UnityEngine;
 
 namespace Assets.Scripts
 {
     public class PriceIndicator : MonoBehaviour
     {
+        public Action<PriceIndicator> LifetimeEnded = (a)=>{};
+
         [SerializeField] private TMPro.TMP_Text _textField;
-        [SerializeField] private float _lifetime = 1f;
+        [SerializeField] private float _maxLifetime = 1f;
         [SerializeField] private Animation _anim;
-        private float _timer;
+        private float _lifetime;
         private int _price;
         private Transform _cameraTransform;
         private void Start()
         {
             _cameraTransform = Camera.main.transform;
             transform.LookAt(2*transform.position- _cameraTransform.position);
-
+            _lifetime = _maxLifetime;
         }
         private void Update()
         {
-            _timer += Time.deltaTime;
-            if (_timer > _lifetime) Destroy(gameObject);
-            if(_timer > _lifetime / 2)
+            _lifetime -= Time.deltaTime;
+            if (!Alive())
             {
-                _textField.alpha = 1f- (_timer - _lifetime/2f)/(_lifetime / 2f);
+                LifetimeEnded.Invoke(this);
+                return;
             }
+            _textField.alpha =Mathf.Clamp(_lifetime/(_maxLifetime / 2f),0,1);
+
             if ((transform.position - _cameraTransform.position).z < 0) Destroy(gameObject);
         }
         public void SetValue( int value)
         {
+            _lifetime = _maxLifetime;
             _price = value;
             _textField.text = value + "$";
             if (_price < 0)
             {
                 _textField.color = Color.red;
             }
-            _anim.Play();
+            _anim?.Play();
         }
 
+        public bool Alive()
+        {
+            return _lifetime > 0;
+        }
         
         public void AddValue( int value)
         {
-            _price += value;
-            _lifetime += 1;
-            _textField.text = _price + "$";
-            _anim.Play();
+            SetValue(_price + value);
+        }
+
+        public GameObject CreateCopyAt(Vector3 position)
+        {
+            GameObject obj = Instantiate(gameObject, position, Quaternion.identity);
+            obj.SetActive(true);
+            return obj;
         }
         public int GetValue() => _price;
     }

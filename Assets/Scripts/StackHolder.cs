@@ -22,7 +22,6 @@ namespace Assets.Scripts
             _stockpile = new List<Stackable>();
             _stackPosTransform = transform;
             _freeStackTransform = transform.parent.parent;
-            Player = GetComponent<Player>();
         }
 
         public void AddToStack( Stackable item)
@@ -42,6 +41,11 @@ namespace Assets.Scripts
 
             OnPriceChange(item, -item.GetPrice());
             UnstackItem(item);
+            int i = IndexOf(item);
+            if (i + 1 < _stockpile.Count)
+            {
+                _stockpile[i + 1].StackOn(i > 0 ? _stockpile[i - 1].StackPosition : transform);
+            }
             _stockpile.Remove(item);
             _stackPosTransform = (_stockpile.Count > 0 )? _stockpile[^1].StackPosition : transform;
 

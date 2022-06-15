@@ -11,7 +11,7 @@ namespace Assets.Scripts
 {
     static class DataManager
     {
-        private const string FilePath = "gamedata.dat";
+        private const string FilePath = "gamedata.pldat";
         private static readonly BinaryFormatter Formatter = new ();
         private static Dictionary<string, object> _dataDictionary;
         public static void SaveData(string key, object value)

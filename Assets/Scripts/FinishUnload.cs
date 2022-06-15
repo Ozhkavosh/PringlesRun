@@ -11,11 +11,11 @@ namespace Assets.Scripts
         private List<Stackable> _stackables = new (10);
         private void OnTriggerEnter(Collider other)
         {
-            Player player = other.GetComponent<Player>();
-            if (player != null)
+            var holder = other.GetComponent<StackHolder>();
+            if (holder != null)
             {
                 Debug.Log("Player collided with unload trigger",this);
-                player.ReachedFullStop();
+                holder.Player.ReachedFullStop();
                 return;
             }
             Stackable stackable = other.GetComponent<Stackable>();

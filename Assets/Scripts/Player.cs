@@ -6,13 +6,11 @@ namespace Assets.Scripts
 {
     public class Player : MonoBehaviour
     {
+        [SerializeField] private ScoreManager _scoreManager; 
         [SerializeField] private  float _maxMoveSpeed = 4f;
         [Range(0,0.9f),SerializeField] private  float _weightMaxSlowdownPercentage = 0.3f;
         [SerializeField] private  int _stackSizeForMaxSlowdown = 5;
-
         [SerializeField] private Transform _movingRoot;
-        [SerializeField] private TMPro.TMP_Text _totalPriceTextField;
-        [SerializeField] private GameObject _priceIndicator;
         [SerializeField] private float _pushBackStrenght = 5f;
         [SerializeField] private float _interactionSlowdown = 0.3f;
         [SerializeField] private float _interactionSlowdownDuration = 1f;
@@ -23,15 +21,13 @@ namespace Assets.Scripts
         private bool _isGameFinished;
         private bool _stopHolder;
         private float _pushLength;
-        private int _totalPrice;
         private float _targetPushLength;
         private StackHolder _stackHolder;
-        private Vector3 _lastPriceChangePos;
-        private PriceIndicator _lastIndicator;
 
         private void Awake()
         {
             _stackHolder = GetComponentInChildren<StackHolder>();
+            _stackHolder.Player = this;
             _holderTransform = _stackHolder.transform;
             _stackHolder.OnPriceChanged += OnPriceChange;
             _stackHolder.SizeChanged += OnStackSizeChanged;
@@ -44,17 +40,15 @@ namespace Assets.Scripts
                 MoveForward();
                 return;
             }
-            if (!_stopHolder)
-            {
-                Vector3 vec = _movingRoot.forward * (_maxMoveSpeed * Time.deltaTime);
-                _holderTransform.position += vec;
-            }
+            //if (!_stopHolder)
+            //{
+            //    Vector3 vec = _movingRoot.forward * (_maxMoveSpeed * Time.deltaTime);
+            //    _holderTransform.position += vec;
+            //}
         }
-        public void ReachedFinish()
+        public void Stop()
         {
             _isGameFinished = true;
-            PlayerBalance.GetInstance().Add(_totalPrice);
-            PlayerBalance.GetInstance().Save();
         }
         public void ReachedFullStop()
         {
@@ -95,26 +89,9 @@ namespace Assets.Scripts
 
         private void OnPriceChange(Stackable item, int value)
         {
-            _totalPrice += value;
-            ShowPrice();
-            IndicatePriceChange(item,value);
-        }
-        private void ShowPrice() => _totalPriceTextField.text = $"{_totalPrice} $";
-        private void IndicatePriceChange(Stackable item, int value, bool forceNew = false)
-        {
-            Vector3 itemPos = item.transform.position;
-            if ((_lastPriceChangePos - itemPos).magnitude > 4 || !_lastIndicator || forceNew || Math.Sign(_lastIndicator.GetValue()) != Math.Sign(value))
-            {
-                _lastIndicator = Instantiate(_priceIndicator, itemPos, Quaternion.identity).GetComponent<PriceIndicator>();
-                _lastIndicator.SetValue(value);
-            }
-            else
-            {
-                _lastIndicator.AddValue(value);
-            }
-            _lastPriceChangePos = itemPos;
-        }
+            _scoreManager?.IndicateScoreChange(item.transform.position, value);
 
+        }
         private void OnStackSizeChanged(Stackable item,int currentSize, bool addedToStack)
         {
             _weightSlowdownPercentage =
@@ -131,7 +108,7 @@ namespace Assets.Scripts
                     if(trap.HasPushBack) ApplyPushBack(_pushBackStrenght);
                     break;
                 case SellerObstacle:
-                    PlayerBalance.GetInstance().Add(item.GetPrice());
+                    _scoreManager?.ChangePlayerBalance(item.GetPrice());
                     _stackHolder.RemoveFromStack(item);
                     item.SetToDestroy();
                     break;

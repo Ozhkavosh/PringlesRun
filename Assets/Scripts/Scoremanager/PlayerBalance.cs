@@ -3,12 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using UnityEngine;
 
 namespace Assets.Scripts
 {
+    /// <summary>
+    /// Управляет счетом игрока и осуществляет сохранение данных
+    /// </summary>
     class PlayerBalance
     {
-        public Action<int> BalanceChanged;
+        public Action<int> BalanceChanged = (a)=> { };
         private static string _dataKey = "playerBalance";
         private static PlayerBalance _instance;
         private int _balance;

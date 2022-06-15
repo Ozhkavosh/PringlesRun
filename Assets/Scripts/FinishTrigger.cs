@@ -10,8 +10,7 @@ namespace Assets.Scripts
 
             Player player = other.GetComponent<Player>();
             if (player is null) return;
-            player.ReachedFinish();
-
+            player.Stop();
         }
     }
 }
