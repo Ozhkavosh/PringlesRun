@@ -35,11 +35,12 @@ namespace Assets.Scripts
 
             SizeChanged.Invoke(item, _stockpile.Count, true);
         }
-        public void RemoveFromStack(Stackable item)
+        public void RemoveFromStack(Stackable item, bool causesPriceChange = true)
         {
             if (!item.IsStacked() || !_stockpile.Contains(item)) return;
 
-            OnPriceChange(item, -item.GetPrice());
+            if(causesPriceChange) OnPriceChange(item, -item.GetPrice());
+
             UnstackItem(item);
             int i = IndexOf(item);
             if (i + 1 < _stockpile.Count)
@@ -106,6 +107,12 @@ namespace Assets.Scripts
             item.PriceChangeEvent.AddListener(OnPriceChange);
             item.Holder = this;
             item.transform.parent = transform.parent;
+        }
+        public List<Stackable> GetSorted()
+        {
+            List<Stackable> sorted = new List<Stackable>(_stockpile);
+            sorted.Sort((a, b) => a.GetPrice().CompareTo(b.GetPrice()) );
+            return sorted;
         }
     }
 }

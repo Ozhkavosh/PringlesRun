@@ -6,6 +6,7 @@ namespace Assets.Scripts
 {
     public class Player : MonoBehaviour
     {
+        public StackHolder Holder;
         [SerializeField] private ScoreManager _scoreManager; 
         [SerializeField] private  float _maxMoveSpeed = 4f;
         [Range(0,0.9f),SerializeField] private  float _weightMaxSlowdownPercentage = 0.3f;
@@ -14,23 +15,20 @@ namespace Assets.Scripts
         [SerializeField] private float _pushBackStrenght = 5f;
         [SerializeField] private float _interactionSlowdown = 0.3f;
         [SerializeField] private float _interactionSlowdownDuration = 1f;
-        private Transform _holderTransform;
         private float _slowdownTime = 0f;
         private float _slowdownMaxTime = 0f;
         private float _weightSlowdownPercentage;
         private bool _isGameFinished;
-        private bool _stopHolder;
         private float _pushLength;
         private float _targetPushLength;
-        private StackHolder _stackHolder;
-
+        
         private void Awake()
         {
-            _stackHolder = GetComponentInChildren<StackHolder>();
-            _stackHolder.Player = this;
-            _holderTransform = _stackHolder.transform;
-            _stackHolder.OnPriceChanged += OnPriceChange;
-            _stackHolder.SizeChanged += OnStackSizeChanged;
+            Holder = GetComponentInChildren<StackHolder>();
+            Holder.Player = this;
+
+            Holder.OnPriceChanged += OnPriceChange;
+            Holder.SizeChanged += OnStackSizeChanged;
         }
         private void Update()
         {
@@ -49,10 +47,8 @@ namespace Assets.Scripts
         public void Stop()
         {
             _isGameFinished = true;
-        }
-        public void ReachedFullStop()
-        {
-            _stopHolder = true;
+            var moveToC = GetComponentInChildren<MoveToCursor>();
+            if (moveToC) moveToC.enabled = false;
         }
         private void MoveForward()
         {
@@ -104,16 +100,25 @@ namespace Assets.Scripts
             switch (obstacle)
             {
                 case Trap trap:
-                    _stackHolder.RemoveAfter(item);
+                    Holder.RemoveAfter(item);
                     if(trap.HasPushBack) ApplyPushBack(_pushBackStrenght);
                     break;
                 case SellerObstacle:
                     _scoreManager?.ChangePlayerBalance(item.GetPrice());
-                    _stackHolder.RemoveFromStack(item);
+                    Holder.RemoveFromStack(item);
                     item.SetToDestroy();
                     break;
             }
         }
+        public List<Stackable> GetMostValuable(int count)
+        {
+            List<Stackable> items = Holder.GetSorted();
+            items.Reverse();
+            if (count >= items.Count) return items;
+            items.RemoveRange(count, items.Count - count);
+            return items;
+        }
+
         
     }
 }

@@ -24,6 +24,7 @@ namespace Assets.Scripts
         private int _price;
         private Rigidbody _rigidbody;
         private bool _awaitsToGetDestroyed;
+        private bool _stackingDisabled;
         
         private void Awake()
         {
@@ -33,7 +34,7 @@ namespace Assets.Scripts
         }
         void Update()
         {
-            if (!_wasStacked || _awaitsToGetDestroyed) return;
+            if (!_wasStacked || _awaitsToGetDestroyed || _stackingDisabled) return;
             Vector3 newPos = _transformToStackOn.position;
             newPos -= BackPosition.localPosition;
             RootTransform.position = Vector3.Lerp(RootTransform.position, newPos, _followSpeed);
@@ -69,7 +70,10 @@ namespace Assets.Scripts
             Destroy(gameObject);
             
         }
-
+        public void DisableStacking()
+        {
+            _stackingDisabled = true;
+        }
         public bool PreparingToDestroy()
         {
             return _awaitsToGetDestroyed;
@@ -80,7 +84,7 @@ namespace Assets.Scripts
         }
         private void OnTriggerEnter(Collider other)
         {
-            if ( !_wasStacked || _awaitsToGetDestroyed) return;
+            if ( !_wasStacked || _awaitsToGetDestroyed || _stackingDisabled) return;
             TriggerEntered.Invoke(other);
         }
     }
