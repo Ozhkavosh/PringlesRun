@@ -41,6 +41,7 @@ namespace Assets.Scripts
         }
         public void AddPrice(int price)
         {
+            if (price == 0) return;
             PriceChangeEvent.Invoke(this, price);
             _price += price;
         }
@@ -52,17 +53,17 @@ namespace Assets.Scripts
         {
             _transformToStackOn = transform;
             _wasStacked = true;
-            _rigidbody.isKinematic = true;
+            SetKinematic(true);
             _collider.isTrigger = true;
         }
         public void Unstack()
         {
             _transformToStackOn = null;
             _wasStacked = false;
-            _rigidbody.isKinematic = false;
+            SetKinematic(false);
             _collider.isTrigger = false;
         }
-
+        public void SetKinematic(bool isKinematic) => _rigidbody.isKinematic = isKinematic;
         public void SetToDestroy()
         {
             Debug.Log("Set to destroy",this);
@@ -74,13 +75,13 @@ namespace Assets.Scripts
         {
             _stackingDisabled = true;
         }
+        public bool CanBeStacked()
+        {
+            return !(_awaitsToGetDestroyed || _wasStacked || _stackingDisabled);
+        }
         public bool PreparingToDestroy()
         {
             return _awaitsToGetDestroyed;
-        }
-        public bool IsStacked()
-        {
-            return _wasStacked;
         }
         private void OnTriggerEnter(Collider other)
         {

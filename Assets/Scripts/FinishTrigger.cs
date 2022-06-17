@@ -22,7 +22,12 @@ namespace Assets.Scripts
 
             var player = other.GetComponent<Player>();
             if (player is null) return;
-            player.Stop();
+            foreach (var item in _markets)
+            {
+                item.SetEnabledMove(true);
+            }
+
+            player.SetMove(false);
             cameraAnimator.SetTrigger("GoUp");
             _activateOnTrigger.SetActive(true);
             _player = player;
@@ -45,11 +50,8 @@ namespace Assets.Scripts
 
                     if (list.Count == 0) yield break;
                     var item = list[0];
-
                     if (!_markets[i].TrySell(item)) break;
 
-                    _player.Holder.RemoveFromStack(item, false);
-                    item.DisableStacking();
                     list.Remove(item);
                     yield return new WaitForSeconds(_sellDelay);
                 }
@@ -62,6 +64,8 @@ namespace Assets.Scripts
 
             _activateOnTrigger.SetActive(false);
             cameraAnimator.SetTrigger("GoDown");
+            yield return new WaitForSeconds(1f);
+            _player.SetMove(true);
         }
     }
 }

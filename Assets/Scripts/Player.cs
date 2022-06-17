@@ -38,17 +38,12 @@ namespace Assets.Scripts
                 MoveForward();
                 return;
             }
-            //if (!_stopHolder)
-            //{
-            //    Vector3 vec = _movingRoot.forward * (_maxMoveSpeed * Time.deltaTime);
-            //    _holderTransform.position += vec;
-            //}
         }
-        public void Stop()
+        public void SetMove(bool canMove)
         {
-            _isGameFinished = true;
+            _isGameFinished = !canMove;
             var moveToC = GetComponentInChildren<MoveToCursor>();
-            if (moveToC) moveToC.enabled = false;
+            if (moveToC) moveToC.enabled = canMove;
         }
         private void MoveForward()
         {
@@ -119,6 +114,6 @@ namespace Assets.Scripts
             return items;
         }
 
-        
+        public int GetScore() => _scoreManager.GetScore();
     }
 }

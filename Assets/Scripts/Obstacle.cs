@@ -11,7 +11,7 @@ namespace Assets.Scripts
         {
             Stackable stackable = other.GetComponent<Stackable>();
             if (stackable == null) return;
-            if(stackable.IsStacked() && stackable.Holder!=null) stackable.Holder.Player.OnCollideWithObstacle(this, stackable);
+            if(stackable.Holder!=null) stackable.Holder.Player.OnCollideWithObstacle(this, stackable);
 
             if (_particleSystem != null) _particleSystem.Play();
         }

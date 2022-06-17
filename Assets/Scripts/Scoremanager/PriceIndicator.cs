@@ -55,6 +55,7 @@ namespace Assets.Scripts
         public GameObject CreateCopyAt(Vector3 position)
         {
             GameObject obj = Instantiate(gameObject, position, Quaternion.identity);
+            obj.transform.SetParent(transform.parent);
             obj.SetActive(true);
             return obj;
         }

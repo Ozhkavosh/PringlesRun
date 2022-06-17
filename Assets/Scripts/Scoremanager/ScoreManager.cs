@@ -82,5 +82,6 @@ namespace Assets.Scripts
             indicator.LifetimeEnded -= PriceIndicatorExpired;
             Destroy(indicator.gameObject);
         }
+        public int GetScore() => _score;
     }
 }

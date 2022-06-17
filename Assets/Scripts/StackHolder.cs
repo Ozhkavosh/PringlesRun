@@ -13,7 +13,7 @@ namespace Assets.Scripts
         private Vector3 _lastPriceChangePos;
         private PriceIndicator _lastIndicator;
         private Transform _stackPosTransform;
-        private Transform _freeStackTransform;
+        [SerializeField] private Transform _freeStackTransform;
         public Player Player;
 
         private void Awake()
@@ -21,12 +21,12 @@ namespace Assets.Scripts
             SizeChanged += (stackable,a, b) => { };
             _stockpile = new List<Stackable>();
             _stackPosTransform = transform;
-            _freeStackTransform = transform.parent.parent;
+            _freeStackTransform ??= transform.parent.parent;
         }
 
         public void AddToStack( Stackable item)
         {
-            if (item.IsStacked() || _stockpile.Contains(item)) return;
+            if (!item.CanBeStacked() || _stockpile.Contains(item)) return;
             
             OnPriceChange(item, item.GetPrice());
             StackItem(item);
@@ -37,7 +37,7 @@ namespace Assets.Scripts
         }
         public void RemoveFromStack(Stackable item, bool causesPriceChange = true)
         {
-            if (!item.IsStacked() || !_stockpile.Contains(item)) return;
+            if ( !_stockpile.Contains(item)) return;
 
             if(causesPriceChange) OnPriceChange(item, -item.GetPrice());
 
@@ -86,7 +86,7 @@ namespace Assets.Scripts
         private void OnTriggerEnter(Collider other)
         {
             var stackable = other.GetComponent<Stackable>();
-            if (stackable!=null && !stackable.PreparingToDestroy())
+            if (stackable != null && stackable.CanBeStacked())
             {
                 AddToStack(stackable);
             }
@@ -98,7 +98,7 @@ namespace Assets.Scripts
             item.PriceChangeEvent.RemoveListener(OnPriceChange);
             item.TriggerEntered.RemoveListener(OnTriggerEnter);
             item.Holder = null;
-            item.transform.parent = _freeStackTransform;
+            item.transform.SetParent(_freeStackTransform);
         }
         private void StackItem(Stackable item)
         {
@@ -106,7 +106,7 @@ namespace Assets.Scripts
             item.TriggerEntered.AddListener(OnTriggerEnter);
             item.PriceChangeEvent.AddListener(OnPriceChange);
             item.Holder = this;
-            item.transform.parent = transform.parent;
+            item.transform.SetParent(transform.parent);
         }
         public List<Stackable> GetSorted()
         {

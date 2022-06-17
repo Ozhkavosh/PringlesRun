@@ -9,27 +9,32 @@ public class Market : MonoBehaviour
     [SerializeField] private float _priceMultiplier = 1f;
     [SerializeField] private Transform[] _positions;
     [SerializeField] private float _moveTime = 0.1f;
-    private Stackable[] _stackables;
     private List<MovingObject> _itemsMoving;
     private int _count = 0;
+    private bool _movementEnabled;
     private void Awake()
     {
-        _stackables = new Stackable[Capacity];
         _itemsMoving = new List<MovingObject>(Capacity);
     }
     public bool TrySell(Stackable stackable)
     {
         if (_count >= Capacity) return false;
-        _stackables[_count] = stackable;
         stackable.AddPrice((int)(stackable.GetPrice() * _priceMultiplier));
+
+        stackable.DisableStacking();
+        stackable.Holder.RemoveFromStack(stackable, false);
+        stackable.SetKinematic(true);
+        
         _itemsMoving.Add(new MovingObject(stackable.transform,_positions[_count%_positions.Length].position,_moveTime));
         _count++;
         return true;
     }
     private void Update()
     {
+        if (!_movementEnabled) return;
         MoveToPosition();
     }
+    public void SetEnabledMove(bool enabled) => _movementEnabled = enabled;
     private void MoveToPosition()
     {
         int i = 0;
