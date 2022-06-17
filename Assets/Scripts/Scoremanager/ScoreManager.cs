@@ -62,6 +62,7 @@ namespace Assets.Scripts
             float minDistance = MaxDistance;
             foreach (var indicator in _indicators)
             {
+                
                 if (Math.Sign(indicator.GetValue()) != sign || !indicator.Alive()) continue;
 
                 float dist = Vector3.Distance(position, indicator.transform.position);

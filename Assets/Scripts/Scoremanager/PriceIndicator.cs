@@ -29,8 +29,6 @@ namespace Assets.Scripts
                 return;
             }
             _textField.alpha =Mathf.Clamp(_lifetime/(_maxLifetime / 2f),0,1);
-
-            if ((transform.position - _cameraTransform.position).z < 0) Destroy(gameObject);
         }
         public void SetValue( int value)
         {

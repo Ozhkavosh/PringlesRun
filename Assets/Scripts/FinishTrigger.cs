@@ -6,6 +6,7 @@ namespace Assets.Scripts
     {
         [SerializeField] private Market[] _markets;
         [SerializeField] private GameObject _activateOnTrigger;
+        [SerializeField] private Animator cameraAnimator;
         private int _sellCapacity;
         private Player _player;
         float _sellDelay = 0.1f;
@@ -22,6 +23,7 @@ namespace Assets.Scripts
             var player = other.GetComponent<Player>();
             if (player is null) return;
             player.Stop();
+            cameraAnimator.SetTrigger("GoUp");
             _activateOnTrigger.SetActive(true);
             _player = player;
 
@@ -30,6 +32,7 @@ namespace Assets.Scripts
         {
             if (_player is null) return;
             List<Stackable> listToSell = _player.GetMostValuable(_sellCapacity);
+            
             StartCoroutine(SellItemsWithDelays(listToSell));
             StartCoroutine(OnSellingFinished(listToSell.Count * _sellDelay + 1f));
         }
@@ -58,6 +61,7 @@ namespace Assets.Scripts
             yield return new WaitForSeconds(delay);
 
             _activateOnTrigger.SetActive(false);
+            cameraAnimator.SetTrigger("GoDown");
         }
     }
 }
