@@ -39,11 +39,11 @@ namespace Assets.Scripts
                 return;
             }
         }
-        public void SetMove(bool canMove)
+        public void SetMove(bool canMove) => _isGameFinished = !canMove;
+        public void SetCursorFollow(bool follow)
         {
-            _isGameFinished = !canMove;
             var moveToC = GetComponentInChildren<MoveToCursor>();
-            if (moveToC) moveToC.enabled = canMove;
+            if (moveToC) moveToC.enabled = follow;
         }
         private void MoveForward()
         {

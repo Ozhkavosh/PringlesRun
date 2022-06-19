@@ -28,6 +28,7 @@ namespace Assets.Scripts
             }
 
             player.SetMove(false);
+            player.SetCursorFollow(false);
             cameraAnimator.SetTrigger("GoUp");
             _activateOnTrigger.SetActive(true);
             _player = player;
