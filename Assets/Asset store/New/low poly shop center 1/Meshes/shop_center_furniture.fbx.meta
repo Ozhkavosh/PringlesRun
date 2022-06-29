@@ -1,0 +1,193 @@
+fileFormatVersion: 2
+guid: a6009d3ddb571ca40966770d89cf4bc6
+ModelImporter:
+  serializedVersion: 21200
+  internalIDToNameTable:
+  - first:
+      74: -2830085671423248322
+    second: low_poly_interior.227|cam_mainAction.001
+  - first:
+      74: -2575399955218169661
+    second: low_poly_interior.227|Cylinder.018Action.007
+  - first:
+      74: -6346694459739228088
+    second: low_poly_interior.227|Cylinder.018Action.008
+  - first:
+      74: -6417729154800285314
+    second: low_poly_interior.227|Cylinder.018Action.010
+  - first:
+      74: -6760430649676039314
+    second: low_poly_interior.227|Cylinder.018Action.011
+  - first:
+      74: 8318535019508356228
+    second: low_poly_interior.7164|cam_mainAction.001
+  - first:
+      74: 5009698384053568972
+    second: low_poly_interior.7164|Cylinder.018Action.007
+  - first:
+      74: -7293103844030832038
+    second: low_poly_interior.7164|Cylinder.018Action.008
+  - first:
+      74: -65369473390338876
+    second: low_poly_interior.7164|Cylinder.018Action.010
+  - first:
+      74: 6065924502073633549
+    second: low_poly_interior.7164|Cylinder.018Action.011
+  - first:
+      74: -1692043330197601767
+    second: low_poly_interior.7165|cam_mainAction.001
+  - first:
+      74: 4765522862743598269
+    second: low_poly_interior.7165|Cylinder.018Action.007
+  - first:
+      74: 3826213977406077205
+    second: low_poly_interior.7165|Cylinder.018Action.008
+  - first:
+      74: -3823310211796329846
+    second: low_poly_interior.7165|Cylinder.018Action.010
+  - first:
+      74: 7076698712970530053
+    second: low_poly_interior.7165|Cylinder.018Action.011
+  - first:
+      74: 764673239257145421
+    second: low_poly_interior.7166|cam_mainAction.001
+  - first:
+      74: 4180741532472170856
+    second: low_poly_interior.7166|Cylinder.018Action.007
+  - first:
+      74: -1991245064843374679
+    second: low_poly_interior.7166|Cylinder.018Action.008
+  - first:
+      74: 4510375859112213628
+    second: low_poly_interior.7166|Cylinder.018Action.010
+  - first:
+      74: -1541420926525668194
+    second: low_poly_interior.7166|Cylinder.018Action.011
+  - first:
+      74: 3952007801256394213
+    second: low_poly_interior.7167|cam_mainAction.001
+  - first:
+      74: -2217434132720334090
+    second: low_poly_interior.7167|Cylinder.018Action.007
+  - first:
+      74: -917080313571202901
+    second: low_poly_interior.7167|Cylinder.018Action.008
+  - first:
+      74: -8145656460643883036
+    second: low_poly_interior.7167|Cylinder.018Action.010
+  - first:
+      74: -6227262256355172636
+    second: low_poly_interior.7167|Cylinder.018Action.011
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Material
+    second: {fileID: 2100000, guid: a3e3268b2326ea84cb883984d73d3b4b, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: low_poly_interior
+    second: {fileID: 2100000, guid: 262859fbf52544c4687d6347ffb78c08, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: low_poly_interior_window
+    second: {fileID: 2100000, guid: 978afcd590ec56342ac81bbba01130da, type: 2}
+  materials:
+    materialImportMode: 2
+    materialName: 0
+    materialSearch: 1
+    materialLocation: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    importConstraints: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations: []
+    isReadable: 0
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    useSRGBMaterialColor: 1
+    sortHierarchyByName: 1
+    importVisibility: 1
+    importBlendShapes: 1
+    importCameras: 1
+    importLights: 1
+    fileIdsGeneration: 2
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    keepQuads: 0
+    weldVertices: 1
+    bakeAxisConversion: 0
+    preserveHierarchy: 0
+    skinWeightsMode: 0
+    maxBonesPerVertex: 4
+    minBoneWeight: 0.001
+    optimizeBones: 0
+    meshOptimizationFlags: -1
+    indexFormat: 0
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVMarginMethod: 1
+    secondaryUVMinLightmapResolution: 40
+    secondaryUVMinObjectScale: 1
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+    legacyComputeAllNormalsFromSmoothingGroupsWhenMeshHasBlendShapes: 0
+    blendShapeNormalImportMode: 1
+    normalSmoothingSource: 0
+  referencedClips: []
+  importAnimation: 1
+  humanDescription:
+    serializedVersion: 3
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    globalScale: 1
+    rootMotionBoneName: 
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  autoGenerateAvatarMappingIfUnspecified: 1
+  animationType: 2
+  humanoidOversampling: 1
+  avatarSetup: 0
+  addHumanoidExtraRootOnlyWhenUsingAvatar: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
