@@ -42,6 +42,7 @@ GameObject:
   - component: {fileID: 1511378228078419350}
   - component: {fileID: 5067711434846512200}
   - component: {fileID: 5858489792727338331}
+  - component: {fileID: 166345329263833042}
   m_Layer: 0
   m_Name: Stackable Object
   m_TagString: Untagged
@@ -96,7 +97,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   StackPosition: {fileID: 1511378227662384831}
-  RootTransform: {fileID: 6140410444485831510}
+  RootTransform: {fileID: 1511378228078419350}
   BackPosition: {fileID: 8895036615188751159}
   _basePrice: 20
   _followSpeed: 0.3
@@ -107,6 +108,19 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   Type: 0
+--- !u!135 &166345329263833042
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1511378228078419351}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.52
+  m_Center: {x: 0, y: 0.29, z: 0.06}
 --- !u!1 &5788138246668194281
 GameObject:
   m_ObjectHideFlags: 0
@@ -216,21 +230,3 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 1220598918636671833, guid: fec38d2189b71f4499bcb819a8377440, type: 3}
   m_PrefabInstance: {fileID: 5028109536657782799}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &7164179297005721925 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 2786366867395469642, guid: fec38d2189b71f4499bcb819a8377440, type: 3}
-  m_PrefabInstance: {fileID: 5028109536657782799}
-  m_PrefabAsset: {fileID: 0}
---- !u!135 &5880085221836839574
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7164179297005721925}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.13
-  m_Center: {x: 0.0019424148, y: 0.07211308, z: 0.016117055}
